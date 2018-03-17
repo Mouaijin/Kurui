@@ -2,7 +2,11 @@
 
 namespace Kurui.Core
 {
-    public class Class1
+    //Base Cpu class
+    internal partial class Cpu
     {
+
     }
+
+
 }
