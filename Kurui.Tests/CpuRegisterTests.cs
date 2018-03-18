@@ -26,10 +26,12 @@ namespace Kurui.Tests
         public void FlagsSetProperly()
         {
             Cpu cpu = new Cpu();
+
             Assert.True(cpu.GetZ());
             Assert.False(cpu.GetN());
             Assert.True(cpu.GetH());
             Assert.True(cpu.GetC());
+
             cpu.SetZ(false);
             Assert.False(cpu.GetZ());
 

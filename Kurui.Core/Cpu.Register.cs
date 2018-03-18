@@ -24,6 +24,7 @@ namespace Kurui.Core
         internal bool GetN() => F.BitIsSet(6);
         internal bool GetH() => F.BitIsSet(5);
         internal bool GetC() => F.BitIsSet(4);
+        internal void ClearFlags() => F = 0;
 
         [StructLayout(LayoutKind.Explicit)]
         internal struct Register
