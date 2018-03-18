@@ -5,7 +5,7 @@ namespace Kurui.Core
 {
     internal partial class Cpu
     {
-        private Register AF, BC, DE, HL, SP, PC;
+        internal Register AF = 0x01B0, BC = 0x0013, DE = 0x00D8, HL = 0x014D, SP = 0xFFFE, PC = 0x0100;
         private ref byte A => ref AF.hi;
         private ref byte F => ref AF.lo;
         private ref byte B => ref BC.hi;
@@ -16,14 +16,14 @@ namespace Kurui.Core
         private ref byte L => ref HL.lo;
 
 
-        private void SetZ(bool bit) => F = bit ? F.SetBit(0) : F.ClearBit(0);
-        private void SetN(bool bit) => F = bit ? F.SetBit(1) : F.ClearBit(1);
-        private void SetH(bool bit) => F = bit ? F.SetBit(2) : F.ClearBit(2);
-        private void SetC(bool bit) => F = bit ? F.SetBit(3) : F.ClearBit(3);
-        private bool GetZ() => F.BitIsSet(0);
-        private bool GetN() => F.BitIsSet(1);
-        private bool GetH() => F.BitIsSet(2);
-        private bool GetC() => F.BitIsSet(3);
+        internal void SetZ(bool bit) => F = bit ? F.SetBit(7) : F.ClearBit(7);
+        internal void SetN(bool bit) => F = bit ? F.SetBit(6) : F.ClearBit(6);
+        internal void SetH(bool bit) => F = bit ? F.SetBit(5) : F.ClearBit(5);
+        internal void SetC(bool bit) => F = bit ? F.SetBit(4) : F.ClearBit(4);
+        internal bool GetZ() => F.BitIsSet(7);
+        internal bool GetN() => F.BitIsSet(6);
+        internal bool GetH() => F.BitIsSet(5);
+        internal bool GetC() => F.BitIsSet(4);
 
         [StructLayout(LayoutKind.Explicit)]
         internal struct Register
@@ -31,6 +31,66 @@ namespace Kurui.Core
             [FieldOffset(1)] public byte hi;
             [FieldOffset(0)] public byte lo;
             [FieldOffset(0)] public ushort wide;
+
+            public static implicit operator Register(ushort wide)
+            {
+                return new Register {wide = wide};
+            }
+
+            public static implicit operator Register(byte lo)
+            {
+                return new Register {lo = lo, hi = 0};
+            }
+
+            public static Register operator +(Register a, Register b)
+            {
+                return new Register {wide = (ushort) ( a.wide + b.wide )};
+            }
+
+            public static Register operator +(Register a, byte b)
+            {
+                return new Register {wide = (ushort) ( a.wide + b )};
+            }
+
+            public static Register operator +(Register a, sbyte b)
+            {
+                return new Register {wide = (ushort) ( a.wide + b )};
+            }
+
+            public static Register operator -(Register a, Register b)
+            {
+                return new Register {wide = (ushort) ( a.wide - b.wide )};
+            }
+
+            public static Register operator -(Register a, byte b)
+            {
+                return new Register {wide = (ushort) ( a.wide - b )};
+            }
+        }
+
+        ///Returned from CPU functions to represent new CPU flags
+        internal struct FlagSet
+        {
+            public byte flags;
+
+            ///Always remember to set correct bools for flags not being set
+            public FlagSet(bool z, bool n, bool h, bool c)
+            {
+                int _z = z ? 0b10000000 : 0;
+                int _n = n ? 0b01000000 : 0;
+                int _h = h ? 0b00100000 : 0;
+                int _c = c ? 0b00010000 : 0;
+                flags = (byte) ( _z | _n | _h | _c );
+            }
+            ///Raw constructor
+            public FlagSet(byte reg)
+            {
+                flags = reg;
+            }
+            public static implicit operator FlagSet(byte value)
+            {
+                return new FlagSet(value);
+            }
         }
     }
 }

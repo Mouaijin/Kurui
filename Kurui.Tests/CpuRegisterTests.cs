@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using Register = Kurui.Core.Cpu.Register;
+using Cpu = Kurui.Core.Cpu;
 
 namespace Kurui.Tests
 {
@@ -9,14 +10,38 @@ namespace Kurui.Tests
         [Fact]
         public void RegisterFieldsAlignedCorrectly()
         {
-            Register reg = new Register();
-            reg.hi = 0xff;
-            reg.lo = 0x00;
+            Register reg = new Register
+            {
+                hi = 0xff,
+                lo = 0x00
+            };
             Assert.Equal(0xff00, reg.wide);
 
             reg.wide = 0x1ff1;
             Assert.Equal(0x1f, reg.hi);
             Assert.Equal(0xf1, reg.lo);
+        }
+
+        [Fact]
+        public void FlagsSetProperly()
+        {
+            Cpu cpu = new Cpu();
+            Assert.True(cpu.GetZ());
+            Assert.False(cpu.GetN());
+            Assert.True(cpu.GetH());
+            Assert.True(cpu.GetC());
+            cpu.SetZ(false);
+            Assert.False(cpu.GetZ());
+
+            cpu.SetN(true);
+            Assert.True(cpu.GetN());
+
+            cpu.SetH(false);
+            Assert.False(cpu.GetH());
+
+            cpu.SetC(false);
+            Assert.False(cpu.GetC());
+
         }
     }
 }
