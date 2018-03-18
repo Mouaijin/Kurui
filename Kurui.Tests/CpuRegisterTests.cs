@@ -1,13 +1,14 @@
 using System;
-using Xunit;
+using NUnit;
 using Cpu = Kurui.Core.Cpu;
 using Kurui.Core;
+using NUnit.Framework;
 
 namespace Kurui.Tests
 {
     public class CpuRegisterTests
     {
-        [Fact]
+        [Test]
         public void RegisterFieldsAlignedCorrectly()
         {
             Imm reg = new Imm
@@ -15,14 +16,14 @@ namespace Kurui.Tests
                 hi = 0xff,
                 lo = 0x00
             };
-            Assert.Equal(0xff00, reg.wide);
+            Assert.AreEqual(0xff00, reg.wide);
 
             reg.wide = 0x1ff1;
-            Assert.Equal(0x1f, reg.hi);
-            Assert.Equal(0xf1, reg.lo);
+            Assert.AreEqual(0x1f, reg.hi);
+            Assert.AreEqual(0xf1, reg.lo);
         }
 
-        [Fact]
+        [Test]
         public void FlagsSetProperly()
         {
             Cpu cpu = new Cpu();

@@ -27,10 +27,16 @@ namespace Kurui.Core
             Japanese = bytes[0x014A] == 0;
         }
     }
+
+    internal interface IRam
+    {
+
+    }
     internal interface IRom
     {
+        RomHeader Header { get;  }
         ///Gets a byte or ushort from the rom
-        ref Imm this[int index] { get; }
+        Imm this[int index] { get; set; }
 
     }
 }
