@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace Kurui.Core
 {
     internal partial class Cpu
     {
-        internal Register AF = 0x01B0, BC = 0x0013, DE = 0x00D8, HL = 0x014D, SP = 0xFFFE, PC = 0x0100;
+        internal Imm AF = 0x01B0, BC = 0x0013, DE = 0x00D8, HL = 0x014D, SP = 0xFFFE, PC = 0x0100;
         private ref byte A => ref AF.hi;
         private ref byte F => ref AF.lo;
         private ref byte B => ref BC.hi;
@@ -25,49 +24,6 @@ namespace Kurui.Core
         internal bool GetH() => F.BitIsSet(5);
         internal bool GetC() => F.BitIsSet(4);
         internal void ClearFlags() => F = 0;
-
-        [StructLayout(LayoutKind.Explicit)]
-        internal struct Register
-        {
-            [FieldOffset(1)] public byte hi;
-            [FieldOffset(0)] public byte lo;
-            [FieldOffset(0)] public ushort wide;
-
-            public static implicit operator Register(ushort wide)
-            {
-                return new Register {wide = wide};
-            }
-
-            public static implicit operator Register(byte lo)
-            {
-                return new Register {lo = lo, hi = 0};
-            }
-
-            public static Register operator +(Register a, Register b)
-            {
-                return new Register {wide = (ushort) ( a.wide + b.wide )};
-            }
-
-            public static Register operator +(Register a, byte b)
-            {
-                return new Register {wide = (ushort) ( a.wide + b )};
-            }
-
-            public static Register operator +(Register a, sbyte b)
-            {
-                return new Register {wide = (ushort) ( a.wide + b )};
-            }
-
-            public static Register operator -(Register a, Register b)
-            {
-                return new Register {wide = (ushort) ( a.wide - b.wide )};
-            }
-
-            public static Register operator -(Register a, byte b)
-            {
-                return new Register {wide = (ushort) ( a.wide - b )};
-            }
-        }
 
         ///Returned from CPU functions to represent new CPU flags
         internal struct FlagSet

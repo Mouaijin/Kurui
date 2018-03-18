@@ -1,7 +1,7 @@
 using System;
 using Xunit;
-using Register = Kurui.Core.Cpu.Register;
 using Cpu = Kurui.Core.Cpu;
+using Kurui.Core;
 
 namespace Kurui.Tests
 {
@@ -10,7 +10,7 @@ namespace Kurui.Tests
         [Fact]
         public void RegisterFieldsAlignedCorrectly()
         {
-            Register reg = new Register
+            Imm reg = new Imm
             {
                 hi = 0xff,
                 lo = 0x00
