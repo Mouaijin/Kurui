@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 
 namespace Kurui.Core
@@ -30,14 +31,99 @@ namespace Kurui.Core
 
     internal interface IRam
     {
-
+        Imm this[int index] { get; set; }
     }
+
     internal interface IRom
     {
-        RomHeader Header { get;  }
+        RomHeader Header { get; }
+
         ///Gets a byte or ushort from the rom
         Imm this[int index] { get; set; }
 
     }
-}
 
+    class BasicRom : IRom
+    {
+        public RomHeader Header { get; private set; }
+        private byte[] data = new byte[0x8000];
+
+        public BasicRom(byte[] bytes)
+        {
+            Header = new RomHeader(in bytes);
+            bytes.CopyTo(data, 0);
+        }
+
+        public Imm this[int index]
+        {
+            get => data.ReadImm(index);
+            set
+            {
+                /*do nothing, read only*/
+            }
+        }
+    }
+
+    class Mbc1Rom : IRom
+    {
+        public RomHeader Header { get; private set; }
+        private byte[] data = new byte[0x8000];
+        private byte bankIndex = 1;
+        private IRam ram; //todo: create ram options and ram builder
+        private bool romBankingMode = true;
+
+        public Mbc1Rom(byte[] bytes)
+        {
+            Header = new RomHeader(in bytes);
+            bytes.CopyTo(data, 0);
+        }
+
+        public Imm this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case int x when x <= 0x3FFF:
+                        return data[index];
+                    case int x when x <= 0x7FFF:
+                        return data[index - ( bankIndex * 0x4000 )];
+                    case int x when x >= 0xA000 && x <= 0xBFFF:
+                        return ram[index - 0xA000];
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case int x when x >= 0x2000 && x <= 0x3FFF:
+                        //todo: handle swapping banks
+                        break;
+                    case int x when (x >= 0xA000 && x <= 0xBFFF) :
+                        ram[index] = value;
+                        break;
+                    case int x when x >= 0x6000 && x <= 0x7FFF:
+                        romBankingMode = x == 0;
+                        break;
+                    case int x when x >= 0x4000 && x <= 0x5FFF:
+                        if (!romBankingMode)
+                        {
+                            ram[index] = value;
+                            break;
+                        }
+                        else
+                        {
+                            bankIndex = (byte) ( ( bankIndex & 0b0011_1111 ) | ( ( (byte) value ) & 0b1100_0000 )); //set top two bits according to argument
+                            break;
+                        }
+
+                    default:
+                        break;
+
+
+                }
+            }
+        }
+    }
+}

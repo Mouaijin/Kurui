@@ -26,5 +26,16 @@ namespace Kurui.Core
         public static bool BitIsSet(this byte num, byte index) => ( ( num >> index ) & 1 ) == 1;
         public static bool BitIsSet(this ushort num, byte index) => ( ( num >> index ) & 1 ) == 1;
 
+        public static Imm ReadImm(this byte[] bytes, int index)
+        {
+            if (index == bytes.Length - 1)
+            {
+                return bytes[index];
+            }
+            else
+            {
+                return new Imm{lo = bytes[index], hi = bytes[index + 1]};
+            }
+        }
     }
 }
