@@ -208,4 +208,72 @@ namespace Kurui.Core
             }
         }
     }
+    class Mbc5Rom : IRom
+    {
+        public RomHeader Header { get; private set; }
+        private byte[] data = new byte[0x3F8000];
+        private ushort bankIndex = 1;
+        internal Ram128k ram = new Ram128k();
+        internal bool romBankingMode = true;
+
+        public Mbc5Rom(byte[] bytes)
+        {
+            Header = new RomHeader(in bytes);
+            bytes.CopyTo(data, 0);
+            //todo: load ram if present
+        }
+
+        public Imm this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case int x when x <= 0x3FFF:
+                        return data.ReadImm(index);
+                    case int x when x <= 0x7FFF:
+                        var indexoffset = index - 0x4000;
+                        var bankoffset = bankIndex * 0x4000;
+                        return data.ReadImm(indexoffset + bankoffset);
+                    case int x when x >= 0xA000 && x <= 0xBFFF:
+                        return ram[index - 0xA000];
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case int x when x >= 0 && x <= 0x1FFF:
+                        if (value == 0)
+                            ram.Disable();
+                        else
+                            ram.Enable();
+                        break;
+                    case int x when x >= 0x2000 && x <= 0x2FFF:
+                        bankIndex = (ushort)((bankIndex & 0b11111111_00000000) | value.lo);
+                        break;
+                    case int x when x >= 0x3000 && x <= 0x3FFF:
+                        bankIndex = (ushort)((bankIndex & 0b00000000_11111111) | value.lo << 8);
+                        break;
+                    case int x when (x >= 0xA000 && x <= 0xBFFF):
+                        ram[index - 0xA000] = value;
+                        break;
+                    case int x when x >= 0x6000 && x <= 0x7FFF:
+                        romBankingMode = x == 0;
+                        break;
+                    case int x when x >= 0x4000 && x <= 0x5FFF:
+
+                            ram.SwapBank(value);
+                            break;
+                     
+
+                    default:
+                        break;
+
+
+                }
+            }
+        }
+    }
 }
