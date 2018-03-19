@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
+﻿using System.Text;
 
 namespace Kurui.Core
 {
@@ -29,10 +26,7 @@ namespace Kurui.Core
         }
     }
 
-    internal interface IRam
-    {
-        Imm this[int index] { get; set; }
-    }
+
 
     internal interface IRom
     {
@@ -67,7 +61,7 @@ namespace Kurui.Core
     class Mbc1Rom : IRom
     {
         public RomHeader Header { get; private set; }
-        private byte[] data = new byte[0x8000];
+        private byte[] data = new byte[0x3F8000];
         private byte bankIndex = 1;
         private IRam ram; //todo: create ram options and ram builder
         private bool romBankingMode = true;
@@ -85,9 +79,9 @@ namespace Kurui.Core
                 switch (index)
                 {
                     case int x when x <= 0x3FFF:
-                        return data[index];
+                        return data.ReadImm(index);
                     case int x when x <= 0x7FFF:
-                        return data[index - ( bankIndex * 0x4000 )];
+                        return data.ReadImm(index - bankIndex * 0x4000);
                     case int x when x >= 0xA000 && x <= 0xBFFF:
                         return ram[index - 0xA000];
                     default: return 0;
@@ -97,11 +91,23 @@ namespace Kurui.Core
             {
                 switch (index)
                 {
+                    case int x when x >= 0 && x <= 0x1FFF:
+                        if (value == 0)
+                            ram.Disable();
+                        else
+                            ram.Enable();
+                        break;
                     case int x when x >= 0x2000 && x <= 0x3FFF:
-                        //todo: handle swapping banks
+                        byte register = (byte)(value.lo | 0b11_111);
+                        if (register % 32 == 0 )
+                        {
+                            register++;
+                        }
+
+                        bankIndex = register;
                         break;
                     case int x when (x >= 0xA000 && x <= 0xBFFF) :
-                        ram[index] = value;
+                        ram[index - 0xA000] = value;
                         break;
                     case int x when x >= 0x6000 && x <= 0x7FFF:
                         romBankingMode = x == 0;
@@ -109,7 +115,7 @@ namespace Kurui.Core
                     case int x when x >= 0x4000 && x <= 0x5FFF:
                         if (!romBankingMode)
                         {
-                            ram[index] = value;
+                            ram.SwapBank(value);
                             break;
                         }
                         else

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Kurui.Core
+﻿namespace Kurui.Core
 {
     internal partial class Cpu
     {

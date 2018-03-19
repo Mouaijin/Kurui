@@ -1,5 +1,3 @@
-using System;
-using NUnit;
 using Cpu = Kurui.Core.Cpu;
 using Kurui.Core;
 using NUnit.Framework;
