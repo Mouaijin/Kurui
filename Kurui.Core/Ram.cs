@@ -33,15 +33,18 @@
 
     internal class Ram32k : IRam
     {
-        private bool enabled = false;
+        internal bool enabled = false;
         private byte bankIndex = 0;
         private byte[] bytes = new byte[0x8000];
 
         public Imm this[int index]
         {
-            get => bytes.ReadImm(0x2000 * bankIndex + index);
+            get => enabled? bytes.ReadImm(0x2000 * bankIndex + index) : new Imm {wide = 0};
             set{
-                //tofo
+                if (enabled)
+                {
+                    bytes[0x2000 * bankIndex + index] = value;
+                }
             }
         }
 
