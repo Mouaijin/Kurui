@@ -15,9 +15,7 @@ namespace Kurui.Core
         public Imm this[int index]
         {
             get => 0;
-            set
-            {
-            }
+            set { }
         }
 
         public void Enable()
@@ -41,8 +39,9 @@ namespace Kurui.Core
 
         public Imm this[int index]
         {
-            get => enabled? bytes.ReadImm(0x2000 * bankIndex + index) : new Imm {wide = 0};
-            set{
+            get => enabled ? bytes.ReadImm(0x2000 * bankIndex + index) : new Imm {wide = 0};
+            set
+            {
                 if (enabled)
                 {
                     bytes[0x2000 * bankIndex + index] = value;
@@ -73,6 +72,7 @@ namespace Kurui.Core
         internal DateTime latchData = DateTime.Now;
         internal DateTime dayCounterOffset = DateTime.Today;
         private DateTime GetDate() => latched ? latchData : DateTime.Now;
+
         public void Latch(int num)
         {
             if (!received0 && num == 0)
@@ -85,7 +85,6 @@ namespace Kurui.Core
                 latched = true;
                 received0 = false;
                 latchData = DateTime.Now;
-                
             }
 
             else if (latched && received0 && num == 1)
@@ -98,12 +97,13 @@ namespace Kurui.Core
                 received0 = false;
             }
         }
+
         public byte Seconds => (byte) GetDate().Second;
         public byte Minutes => (byte) GetDate().Minute;
         public byte Hours => (byte) GetDate().Hour;
         public byte Days => (byte) ( GetDate() - dayCounterOffset ).Days;
-        public byte DaySignificantDigit => (byte)((DateTime.Today - dayCounterOffset).Days >> 7 & 1);
-        public byte DaysOverflow => (byte)( ( DateTime.Today - dayCounterOffset ).Days >> 8 & 1);
+        public byte DaySignificantDigit => (byte) ( ( DateTime.Today - dayCounterOffset ).Days >> 7 & 1 );
+        public byte DaysOverflow => (byte) ( ( DateTime.Today - dayCounterOffset ).Days >> 8 & 1 );
         public void ClearCountOffset() => dayCounterOffset = DateTime.Today;
         public byte Register => (byte) ( DaysOverflow << 7 | Convert.ToByte(latched) << 6 | DaySignificantDigit );
     }
@@ -111,13 +111,32 @@ namespace Kurui.Core
     internal class Ram32kTimer : IRam
     {
         internal bool enabled = false;
-        internal bool timerMode = false;
         private byte bankIndex = 0;
+        private RTC rtc = new RTC();
         private byte[] bytes = new byte[0x8000];
 
         public Imm this[int index]
         {
-            get => enabled ? bytes.ReadImm(0x2000 * bankIndex + index) : new Imm { wide = 0 };
+            get
+            {
+                if (enabled && bankIndex < 5)
+                    return bytes.ReadImm(0x2000 * bankIndex + index);
+
+                if (enabled && bankIndex > 5)
+                {
+                    switch (bankIndex)
+                    {
+                        case 0x08: return rtc.Seconds;
+                        case 0x09: return rtc.Minutes;
+                        case 0x0A: return rtc.Hours;
+                        case 0x0B: return rtc.Days;
+                        case 0x0C: return rtc.Register;
+                    }
+                }
+
+                return 0;
+            }
+
             set
             {
                 if (enabled)
@@ -141,6 +160,7 @@ namespace Kurui.Core
         {
             bankIndex = index;
         }
-    }
 
+        public void Latch(int num) => rtc.Latch(num);
+    }
 }

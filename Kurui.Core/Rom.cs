@@ -142,8 +142,7 @@ namespace Kurui.Core
         public RomHeader Header { get; private set; }
         private byte[] data = new byte[0x3F8000];
         private byte bankIndex = 1;
-        internal Ram32k ram = new Ram32k();
-        internal bool romBankingMode = true;
+        internal Ram32kTimer ram = new Ram32kTimer();
 
         public Mbc3Rom(byte[] bytes)
         {
@@ -180,7 +179,7 @@ namespace Kurui.Core
                             ram.Enable();
                         break;
                     case int x when x >= 0x2000 && x <= 0x3FFF:
-                        byte register = (byte)(value.lo & 0b11_111);
+                        byte register = (byte)(value.lo & 0b111_1111);
                         if (register == 0)
                         {
                             register++;
@@ -192,19 +191,14 @@ namespace Kurui.Core
                         ram[index - 0xA000] = value;
                         break;
                     case int x when x >= 0x6000 && x <= 0x7FFF:
-                        romBankingMode = x == 0;
+                        ram.Latch(value);
                         break;
                     case int x when x >= 0x4000 && x <= 0x5FFF:
-                        if (!romBankingMode)
-                        {
+
                             ram.SwapBank(value);
                             break;
-                        }
-                        else
-                        {
-                            bankIndex = (byte)((bankIndex & 0b0011_1111) | (((byte)value) & 0b1100_0000)); //set top two bits according to argument
-                            break;
-                        }
+                        
+            
 
                     default:
                         break;
