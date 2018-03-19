@@ -102,6 +102,7 @@ namespace Kurui.Core
                         break;
                     case int x when x >= 0x2000 && x <= 0x3FFF:
                         byte register = (byte)(value.lo & 0b11_111);
+                        //registers 0x20, 0x40, 0x60, 0x80 all are fake, and actually select bank+1
                         if (register % 32 == 0 )
                         {
                             register++;
@@ -124,6 +125,84 @@ namespace Kurui.Core
                         else
                         {
                             bankIndex = (byte) ( ( bankIndex & 0b0011_1111 ) | ( ( (byte) value ) & 0b1100_0000 )); //set top two bits according to argument
+                            break;
+                        }
+
+                    default:
+                        break;
+
+
+                }
+            }
+        }
+    }
+
+    class Mbc3Rom : IRom
+    {
+        public RomHeader Header { get; private set; }
+        private byte[] data = new byte[0x3F8000];
+        private byte bankIndex = 1;
+        internal Ram32k ram = new Ram32k();
+        internal bool romBankingMode = true;
+
+        public Mbc3Rom(byte[] bytes)
+        {
+            Header = new RomHeader(in bytes);
+            bytes.CopyTo(data, 0);
+            //todo: load ram if present
+        }
+
+        public Imm this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case int x when x <= 0x3FFF:
+                        return data.ReadImm(index);
+                    case int x when x <= 0x7FFF:
+                        var indexoffset = index - 0x4000;
+                        var bankoffset = bankIndex * 0x4000;
+                        return data.ReadImm(indexoffset + bankoffset);
+                    case int x when x >= 0xA000 && x <= 0xBFFF:
+                        return ram[index - 0xA000];
+                    default: return 0;
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case int x when x >= 0 && x <= 0x1FFF:
+                        if (value == 0)
+                            ram.Disable();
+                        else
+                            ram.Enable();
+                        break;
+                    case int x when x >= 0x2000 && x <= 0x3FFF:
+                        byte register = (byte)(value.lo & 0b11_111);
+                        if (register == 0)
+                        {
+                            register++;
+                        }
+
+                        bankIndex = register;
+                        break;
+                    case int x when (x >= 0xA000 && x <= 0xBFFF):
+                        ram[index - 0xA000] = value;
+                        break;
+                    case int x when x >= 0x6000 && x <= 0x7FFF:
+                        romBankingMode = x == 0;
+                        break;
+                    case int x when x >= 0x4000 && x <= 0x5FFF:
+                        if (!romBankingMode)
+                        {
+                            ram.SwapBank(value);
+                            break;
+                        }
+                        else
+                        {
+                            bankIndex = (byte)((bankIndex & 0b0011_1111) | (((byte)value) & 0b1100_0000)); //set top two bits according to argument
                             break;
                         }
 
