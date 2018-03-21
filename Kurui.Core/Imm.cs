@@ -5,8 +5,8 @@ namespace Kurui.Core
     [StructLayout(LayoutKind.Explicit)]
     internal struct Imm
     {
-        [FieldOffset(1)] public byte hi;
-        [FieldOffset(0)] public byte lo;
+        [FieldOffset(1)] public byte   hi;
+        [FieldOffset(0)] public byte   lo;
         [FieldOffset(0)] public ushort wide;
 
         public static implicit operator Imm(ushort wide)

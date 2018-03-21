@@ -42,7 +42,6 @@ namespace Kurui.Tests
 
             cpu.SetC(false);
             Assert.False(cpu.GetC());
-
         }
     }
 }

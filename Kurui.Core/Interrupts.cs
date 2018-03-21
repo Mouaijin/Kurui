@@ -3,6 +3,7 @@
     internal class Interrupts
     {
         private InterruptRegister enable = 0, request = 0;
+        private bool              ime    = false;
 
         public byte EnableRegister
         {
@@ -22,15 +23,15 @@
 
         public void EnableInterrupts()
         {
-            enable.Enable();
+            ime = true;
         }
 
         public void DisableInterrupts()
         {
-            enable.Disable();
+            ime = false;
         }
 
-        public bool InterruptsEnabled => enable == 0;
+        public bool InterruptsEnabled => ime;
 
         public bool VBlankRequest
         {

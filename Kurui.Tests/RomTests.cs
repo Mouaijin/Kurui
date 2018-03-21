@@ -10,8 +10,8 @@ namespace Kurui.Tests
         public RomTests()
         {
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-
         }
+
         [Test]
         public void Mbc1_1MB_Header_Test()
         {
@@ -24,7 +24,6 @@ namespace Kurui.Tests
             Assert.AreEqual(0, rom.Header.RamKB, "RAM shouldn't exist at all");
             Assert.AreEqual(128, rom.Header.RomKB, "ROM should be 128K");
             Assert.False(rom.Header.ColorOnly, "Shouldn't be a color rom");
-
         }
 
         [Test]
@@ -37,7 +36,7 @@ namespace Kurui.Tests
             Assert.AreEqual(0xFF, rom[0x3FF0].lo, "bank 0 lo byte incorrect");
             Assert.AreEqual(0x01FF, rom[0x3FFF].wide, "bank 0 wide incorrect");
             //Bank 1 read
-            var imm = rom[0x4000]; 
+            var imm = rom[0x4000];
             Assert.AreEqual(0x01, imm.lo, "bank 1 lo byte incorrect");
             Assert.AreEqual(0x7E, imm.hi, "bank 1 wide incorrect");
             //Bank swap
@@ -64,9 +63,6 @@ namespace Kurui.Tests
             //swap back to bank 0
             rom[0x4001] = 0;
             Assert.AreEqual(0xEEFF, rom[0xA000].wide, "ram bank 0 should still start with FF EE");
-
-
-
         }
     }
 }
