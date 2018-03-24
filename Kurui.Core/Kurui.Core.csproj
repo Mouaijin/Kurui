@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cpu.Alu.cs" />
+    <Compile Include="Cpu.Impl.cs" />
     <Compile Include="Cpu.cs" />
     <Compile Include="Cpu.Register.cs" />
     <Compile Include="Gameboy.cs" />

@@ -2,6 +2,5 @@
 {
     internal partial class Cpu
     {
-
     }
 }

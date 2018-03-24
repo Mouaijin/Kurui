@@ -13,11 +13,16 @@ namespace Scratchpad
     {
         static void Main(string[] args)
         {
-            byte[] bytes = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-            int sp = 0;
-            Console.WriteLine(bytes[sp = 1]); //why is this legal
-            Console.WriteLine(bytes[sp]);
+            Imm reg = new Imm(){wide = 0xFEEF};
+            Console.WriteLine(reg.lo);
+            ChangeInnerByte(ref reg.lo);
+            Console.WriteLine(reg.lo);
 
+        }
+
+        private static void ChangeInnerByte(ref byte imm)
+        {
+            imm = 0x01;
         }
     }
 

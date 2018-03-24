@@ -41,5 +41,15 @@ namespace Kurui.Core
                 return new Imm {lo = bytes[index], hi = bytes[index + 1]};
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void WriteImm(this byte[] bytes, Imm imm, int index)
+        {
+            bytes[index] = imm.lo;
+            if (imm.writeWide)
+            {
+                bytes[index + 1] = imm.hi;
+            }
+        }
     }
 }

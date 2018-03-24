@@ -155,7 +155,7 @@ namespace Kurui.Core
                 switch (index)
                 {
                     case int x when x >= 0 && x <= 0x1FFF:
-                        if (value == 0)
+                        if (value ==  0)
                             ram.Disable();
                         else
                             ram.Enable();
