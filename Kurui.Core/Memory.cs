@@ -3,7 +3,7 @@
     internal class Memory
     {
         private byte[] workRam = new byte[0x2000], 
-                       hram = new byte[0x7F],
+                       hram = new byte[0x80],
             vram = new byte[0x2000],
             sprites = new byte[0x9F];
 
