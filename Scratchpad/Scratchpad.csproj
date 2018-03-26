@@ -180,6 +180,7 @@
   <ItemGroup>
     <Compile Include="DataMapBenches.cs" />
     <Compile Include="Imm.cs" />
+    <Compile Include="InliningBenchmarks.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

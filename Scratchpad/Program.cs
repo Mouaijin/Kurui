@@ -13,17 +13,11 @@ namespace Scratchpad
     {
         static void Main(string[] args)
         {
-            byte a = 0xff;
-            byte b = 0x09;
-            byte c =(byte) (a + b);
-            Console.WriteLine(c);
+            BenchmarkRunner.Run<InliningBenchmarks>();
 
         }
 
-        private static void ChangeInnerByte(ref byte imm)
-        {
-            imm = 0x01;
-        }
+        
     }
 
 }

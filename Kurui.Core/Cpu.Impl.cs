@@ -29,14 +29,6 @@ namespace Kurui.Core
         private void SubHalfCarry(int dest, int val, bool carry) =>
             SetH(carry && GetC() ? ( dest & 0x0F ) - ( val & 0x0F ) - 1 < 0 : ( dest & 0x0F ) - ( val & 0x0F ) < 0);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void SetFlags(bool? z = null, bool? n = null, bool? h = null, bool? c = null)
-        {
-            if (z.HasValue) SetZ(z.Value);
-            if (n.HasValue) SetN(n.Value);
-            if (h.HasValue) SetN(h.Value);
-            if (c.HasValue) SetC(c.Value);
-        }
 
         public void Add(ref byte destination, byte source, bool carry = false)
         {
@@ -64,14 +56,36 @@ namespace Kurui.Core
 
         public void AddSP(sbyte offset)
         {
+            int result = SP.wide + offset;
+            SetN(false);
+            if (offset > 0)
+            {
+                SetC(result > 0xFFFF);
+                SetH((HL.wide & 0x00FF) + offset > 0x00FF);
+            }
+            if (offset < 0)
+            {
+                SetC(result < 0);
+                SetH((HL.wide & 0x00FF) - offset < 0);
+            }
+
+            SP.wide = (ushort) result;
         }
 
         public void And(byte source)
         {
+            A = (byte) (A & source);
+            SetZ(A == 0);
+            SetC(false);
+            SetN(false);
+            SetH(true);
         }
 
-        public void Bit(byte source)
+        public void Bit(byte source, byte index)
         {
+            SetZ(!source.BitIsSet(index));
+            SetN(false);
+            SetH(true);
         }
 
         public void Call(ushort source, bool condition = true)
@@ -84,6 +98,11 @@ namespace Kurui.Core
 
         public void Cp(byte source)
         {
+            int result =  A - source;
+            SetN(true);
+            SubCarry(result);
+            SubHalfCarry(A, source, false);
+            SetZ(result == 0);
         }
 
         public void Cpl()
@@ -96,18 +115,26 @@ namespace Kurui.Core
 
         public void Dec(ref byte destination)
         {
+            SubHalfCarry(destination, destination - 1, false);
+            SetN(false);
+            destination -= 1;
+            SetZ(destination == 0);
         }
 
         public void Dec(ref ushort destination)
         {
+            destination -= 1;
         }
 
         public void Di()
         {
+            Gameboy.interrupts.DisableInterrupts();
         }
 
         public void Ei()
         {
+            Gameboy.interrupts.EnableInterrupts();
+
         }
 
         public void Halt()
@@ -116,10 +143,15 @@ namespace Kurui.Core
 
         public void Inc(ref byte destination)
         {
+            AddHalfCarry(destination, destination+1, false);
+            SetN(false);
+            destination += 1;
+            SetZ(destination == 0);
         }
 
         public void Inc(ref ushort destination)
         {
+            destination += 1;
         }
 
         public void Jp(ushort source, bool condition = true)
@@ -144,6 +176,11 @@ namespace Kurui.Core
 
         public void Or(byte source)
         {
+            A = (byte)(A | source);
+            SetZ(A == 0);
+            SetC(false);
+            SetN(false);
+            SetH(false);
         }
 
         public void Pop(ref ushort destination)
@@ -156,27 +193,52 @@ namespace Kurui.Core
 
         public void Res(ref byte destination, byte index)
         {
+            destination.ClearBit(index);
         }
 
         public void Ret(bool condition = true)
         {
         }
 
-        public void Rl(ref byte destination, bool carry = false)
+        public void Rl(ref byte destination)
         {
+            int carry = GetC() ? 1 : 0;
+            SetC(destination.BitIsSet(7));
+            destination = (byte) ((destination << 1) | carry);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
+        }
+        public void Rlc(ref byte destination)
+        {
+            SetC(destination.BitIsSet(7));
+            int flipped = destination.BitIsSet(7) ? 1 : 0;
+            destination = (byte) ((destination << 1) | flipped);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
         }
 
-        public void Rla(bool carry = false)
+
+        public void Rr(ref byte destination)
         {
+            int carry = GetC() ? 128 : 0;
+            SetC(destination.BitIsSet(0));
+            destination = (byte)((destination >> 1) | carry);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
+        }
+        public void Rrc(ref byte destination)
+        {
+            SetC(destination.BitIsSet(0));
+            int flipped = destination.BitIsSet(0) ? 128 : 0;
+            destination = (byte)((destination >> 1) | flipped);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
         }
 
-        public void Rr(ref byte destination, bool carry = false)
-        {
-        }
-
-        public void Rra(bool carry = false)
-        {
-        }
 
         public void Rst(byte source)
         {
@@ -192,28 +254,43 @@ namespace Kurui.Core
             destination = (byte) result;
         }
 
-        public void Sub(ref ushort destination, ushort source, bool carry = false)
-        {
-        }
-
         public void Scf()
         {
         }
 
         public void Set(ref byte destination, byte index)
         {
+            destination.SetBit(index);
         }
 
-        public void Sla(ref byte destination, byte source)
+        public void Sla(ref byte destination)
         {
+
+            SetC(destination.BitIsSet(7));
+            destination = (byte)(destination << 1);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
         }
 
         public void Sra(ref byte destination, byte source)
         {
+            int carry = destination & 128;
+            SetC(destination.BitIsSet(0));
+            destination = (byte)((destination >> 1) | carry);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
         }
 
         public void Srl(ref byte destination, byte source)
         {
+
+            SetC(destination.BitIsSet(0));
+            destination = (byte)(destination >> 1);
+            SetN(false);
+            SetH(false);
+            SetZ(destination == 0);
         }
 
         public void Stop()
@@ -226,6 +303,11 @@ namespace Kurui.Core
 
         public void Xor(byte source)
         {
+            A = (byte)(A ^ source);
+            SetZ(A == 0);
+            SetC(false);
+            SetN(false);
+            SetH(false);
         }
     }
 }
