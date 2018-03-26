@@ -13,10 +13,10 @@ namespace Scratchpad
     {
         static void Main(string[] args)
         {
-            Imm reg = new Imm(){wide = 0xFEEF};
-            Console.WriteLine(reg.lo);
-            ChangeInnerByte(ref reg.lo);
-            Console.WriteLine(reg.lo);
+            byte a = 0xff;
+            byte b = 0x09;
+            byte c =(byte) (a + b);
+            Console.WriteLine(c);
 
         }
 
