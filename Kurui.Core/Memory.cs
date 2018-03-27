@@ -7,7 +7,7 @@
             vram = new byte[0x2000],
             sprites = new byte[0x9F];
 
-        public Imm this[int index]
+        public Imm this[ushort index]
         {
             get
             {

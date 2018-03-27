@@ -52,6 +52,7 @@ namespace Kurui.Core
             HL.wide = (ushort) result;
         }
 
+
         public void AddSP(sbyte offset)
         {
             int result = SP.wide + offset;
@@ -176,7 +177,7 @@ namespace Kurui.Core
             return destination;
         }
 
-        public ushort Inc(ref ushort destination)
+        public ushort Inc(ushort destination)
         {
             destination += 1;
             return destination;
@@ -232,11 +233,10 @@ namespace Kurui.Core
             SetH(false);
         }
 
-        public ushort Pop(ushort destination)
+        public void Pop(ref ushort destination)
         {
             SP.wide += 2;
             destination = Gameboy.mmu[SP.wide];
-            return destination;
         }
 
         public void Push(ushort source)

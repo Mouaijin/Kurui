@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,8 +14,12 @@ namespace Scratchpad
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<InliningBenchmarks>();
-
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= 0xFF; i++)
+            {
+                sb.AppendLine($"case 0x{i:X2}: {{}}; break;");
+            }
+            File.WriteAllText("gen.txt", sb.ToString());
         }
 
         
