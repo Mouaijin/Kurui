@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kurui.Core;
+using NUnit.Framework;
+
+namespace Kurui.Tests
+{
+    [TestFixture]
+    public class ImplTests
+    {
+        [SetUp]
+        public void Setup()
+        {
+            Gameboy.Reset();
+            Assert.AreEqual(1, Gameboy.cpu.A, "Pretest sanity check: A is incorrect");
+            Assert.AreEqual(176, Gameboy.cpu.F, "Pretest sanity check: F is incorrect");
+            Assert.AreEqual(0, Gameboy.cpu.B, "Pretest sanity check: B is incorrect");
+            Assert.AreEqual(19, Gameboy.cpu.C, "Pretest sanity check: C is incorrect");
+            Assert.AreEqual(0, Gameboy.cpu.D, "Pretest sanity check: D is incorrect");
+            Assert.AreEqual(216, Gameboy.cpu.E, "Pretest sanity check: E is incorrect");
+            Assert.AreEqual(1, Gameboy.cpu.H, "Pretest sanity check: H is incorrect");
+            Assert.AreEqual(77, Gameboy.cpu.L, "Pretest sanity check: L is incorrect");
+
+        }
+
+        private void AssertFlags(bool Z, bool N, bool H, bool C)
+        {
+            Assert.AreEqual(Z,  Gameboy.cpu.GetZ(), "Z flag incorrect");
+            Assert.AreEqual(N,  Gameboy.cpu.GetN(), "N flag incorrect");
+            Assert.AreEqual(H,  Gameboy.cpu.GetH(), "H flag incorrect");
+            Assert.AreEqual(C,  Gameboy.cpu.GetC(), "C flag incorrect");
+        }
+
+        [Test]
+        public void Add()
+        {
+            Gameboy.cpu.Add(Gameboy.cpu.F);
+            Assert.AreEqual(177, Gameboy.cpu.A);
+            AssertFlags(false, false, false, false);
+            Gameboy.cpu.Add(14);
+            AssertFlags(false, false, false, false);
+            Gameboy.cpu.Add(1);
+            Assert.AreEqual(192, Gameboy.cpu.A);
+            AssertFlags(false, false, true, false);
+            Gameboy.cpu.Add(255);
+            Assert.AreEqual(191, Gameboy.cpu.A);
+            AssertFlags(false, false, false, true);
+            //todo 16 bit tests
+        }
+
+
+        [Test]
+        public void AddSP()
+        {
+
+        }
+
+        [Test]
+        public void And() { }
+
+        [Test]
+        public void Bit() { }
+
+        [Test]
+        public void CallRet() { }
+
+        [Test]
+        public void CcfScf() { }
+
+        [Test]
+        public void Cp() { }
+        [Test]
+        public void Cpl() { }
+        [Test]
+        public void Daa() { }
+        [Test]
+        public void Dec() { }
+        [Test]
+        public void DiEi() { }
+        [Test]
+        public void Inc() { }
+        [Test]
+        public void JpJr() { }
+        [Test]
+        public void Ld() { }
+        [Test]
+        public void Or() { }
+        [Test]
+        public void PopPush() { }
+        [Test]
+        public void ResSet() { }
+        [Test]
+        public void Rotates() { }
+        [Test]
+        public void Sub() { }
+        [Test]
+        public void Shifts() { }
+        [Test]
+        public void Swap() { }
+        [Test]
+        public void Xor() { }
+    }
+}

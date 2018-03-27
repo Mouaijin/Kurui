@@ -9,14 +9,14 @@
                      SP = 0xFFFE,
                      PC = 0x0100;
 
-        private ref byte A => ref AF.hi;
-        private ref byte F => ref AF.lo;
-        private ref byte B => ref BC.hi;
-        private ref byte C => ref BC.lo;
-        private ref byte D => ref DE.hi;
-        private ref byte E => ref DE.lo;
-        private ref byte H => ref HL.hi;
-        private ref byte L => ref HL.lo;
+        internal ref byte A => ref AF.hi;
+        internal ref byte F => ref AF.lo;
+        internal ref byte B => ref BC.hi;
+        internal ref byte C => ref BC.lo;
+        internal ref byte D => ref DE.hi;
+        internal ref byte E => ref DE.lo;
+        internal ref byte H => ref HL.hi;
+        internal ref byte L => ref HL.lo;
 
 
         internal void SetZ(bool bit) => F = bit ? F.SetBit(7) : F.ClearBit(7);

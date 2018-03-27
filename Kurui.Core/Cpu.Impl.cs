@@ -30,14 +30,14 @@ namespace Kurui.Core
             SetH(carry && GetC() ? ( dest & 0x0F ) - ( val & 0x0F ) - 1 < 0 : ( dest & 0x0F ) - ( val & 0x0F ) < 0);
 
 
-        public void Add(ref byte destination, byte source, bool carry = false)
+        public void Add(byte source, bool carry = false)
         {
-            int result = carry && GetC() ? destination + source + 1 : destination + source;
+            int result = carry && GetC() ? A + source + 1 : A + source;
             SetN(false);
             AddCarry(result);
-            AddHalfCarry(destination, source, carry);
+            AddHalfCarry(A, source, carry);
             SetZ(result == 0);
-            destination = (byte) result;
+            A = (byte) result;
         }
 
         public void Add(ushort source, bool carry = false)
@@ -301,14 +301,14 @@ namespace Kurui.Core
             PC.wide = source;
         }
 
-        public void Sub(ref byte destination, byte source, bool carry = false)
+        public void Sub(byte source, bool carry = false)
         {
-            int result = carry && GetC() ? destination - source - 1 : destination - source;
+            int result = carry && GetC() ? A - source - 1 : A - source;
             SetN(true);
             SubCarry(result);
-            SubHalfCarry(destination, source, carry);
+            SubHalfCarry(A, source, carry);
             SetZ(result == 0);
-            destination = (byte) result;
+            A = (byte) result;
         }
 
         public void Scf()

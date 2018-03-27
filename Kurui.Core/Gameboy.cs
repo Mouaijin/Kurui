@@ -22,6 +22,13 @@ namespace Kurui.Core
             interrupts = new Interrupts();
         }
 
+        internal static void Reset()
+        {
+            mmu = new Memory();
+            cpu = new Cpu();
+            joypad = new Joypad();
+            interrupts = new Interrupts();
+        }
         public static void LoadRom(string path) => cart = RomFactory.LoadRom(path);
     }
 }
