@@ -137,17 +137,19 @@ namespace Kurui.Core
             SetH(false);
         }
 
-        public void Dec(ref byte destination)
+        public byte Dec(byte destination)
         {
             SubHalfCarry(destination, destination - 1, false);
             SetN(false);
             destination -= 1;
             SetZ(destination == 0);
+            return destination;
         }
 
-        public void Dec(ref ushort destination)
+        public ushort Dec(ushort destination)
         {
             destination -= 1;
+            return destination;
         }
 
         public void Di()
@@ -165,17 +167,19 @@ namespace Kurui.Core
         {
         }
 
-        public void Inc(ref byte destination)
+        public byte Inc(byte destination)
         {
             AddHalfCarry(destination, destination+1, false);
             SetN(false);
             destination += 1;
             SetZ(destination == 0);
+            return destination;
         }
 
-        public void Inc(ref ushort destination)
+        public ushort Inc(ref ushort destination)
         {
             destination += 1;
+            return destination;
         }
 
         public void Jp(ushort source, bool condition = true)
@@ -190,15 +194,15 @@ namespace Kurui.Core
             PC.wide = (ushort) ( PC.wide + source );
         }
 
-        public void Ld(ref byte destination, byte source)
-        {
-            destination = source;
-        }
+        //public void Ld(byte destination, byte source)
+        //{
+        //    destination = source;
+        //}
 
-        public void Ld(ref ushort destination, ushort source)
-        {
-            destination = source;
-        }
+        //public void Ld(ref ushort destination, ushort source)
+        //{
+        //    destination = source;
+        //}
 
         public void LdHl(sbyte offset)
         {
@@ -228,10 +232,11 @@ namespace Kurui.Core
             SetH(false);
         }
 
-        public void Pop(ref ushort destination)
+        public ushort Pop(ushort destination)
         {
             SP.wide += 2;
             destination = Gameboy.mmu[SP.wide];
+            return destination;
         }
 
         public void Push(ushort source)
@@ -240,9 +245,10 @@ namespace Kurui.Core
             Gameboy.mmu[SP.wide] = new Imm(){wide = source, writeWide = true};
         }
 
-        public void Res(ref byte destination, byte index)
+        public byte Res(byte destination, byte index)
         {
             destination.ClearBit(index);
+            return destination;
         }
 
         public void Ret(bool condition = true)
@@ -357,7 +363,7 @@ namespace Kurui.Core
         {
         }
 
-        public void Swap(ref byte destination)
+        public byte Swap(byte destination)
         {
             int lo2hi = ( destination & 0x0F ) << 4;
             int hi2lo = ( destination & 0xF0 ) >> 4;
@@ -366,6 +372,7 @@ namespace Kurui.Core
             SetC(false);
             destination = (byte) ( lo2hi | hi2lo );
             SetZ(destination == 0);
+            return destination;
         }
 
         public void Xor(byte source)

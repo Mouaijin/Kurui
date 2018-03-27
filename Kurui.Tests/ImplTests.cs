@@ -26,7 +26,7 @@ namespace Kurui.Tests
 
         }
 
-        private void AssertFlags(bool Z, bool N, bool H, bool C)
+        private void CheckFlags(bool Z, bool N, bool H, bool C)
         {
             Assert.AreEqual(Z,  Gameboy.cpu.GetZ(), "Z flag incorrect");
             Assert.AreEqual(N,  Gameboy.cpu.GetN(), "N flag incorrect");
@@ -34,21 +34,38 @@ namespace Kurui.Tests
             Assert.AreEqual(C,  Gameboy.cpu.GetC(), "C flag incorrect");
         }
 
+        private void AssertA(byte val)
+        {
+            Assert.AreEqual(val, Gameboy.cpu.A);
+        }
+
         [Test]
         public void Add()
         {
             Gameboy.cpu.Add(Gameboy.cpu.F);
             Assert.AreEqual(177, Gameboy.cpu.A);
-            AssertFlags(false, false, false, false);
+            CheckFlags(false, false, false, false);
             Gameboy.cpu.Add(14);
-            AssertFlags(false, false, false, false);
+            CheckFlags(false, false, false, false);
             Gameboy.cpu.Add(1);
             Assert.AreEqual(192, Gameboy.cpu.A);
-            AssertFlags(false, false, true, false);
+            CheckFlags(false, false, true, false);
             Gameboy.cpu.Add(255);
             Assert.AreEqual(191, Gameboy.cpu.A);
-            AssertFlags(false, false, false, true);
-            //todo 16 bit tests
+            CheckFlags(false, false, false, true);
+            Gameboy.cpu.Add(10, true);
+            Assert.AreEqual(202, Gameboy.cpu.A);
+            CheckFlags(false, false, true, false);
+            //16bit tests
+            Assert.AreEqual(0x014D, Gameboy.cpu.HL.wide, "HL incorrect to begin 16-bit add tests");
+            Assert.AreEqual(0x0013, Gameboy.cpu.BC.wide, "BC incorrect to being 16-bit add tests");
+            Gameboy.cpu.Add(Gameboy.cpu.BC.wide);
+            Assert.AreEqual(352, Gameboy.cpu.HL.wide);
+            CheckFlags(false, false, false, false);
+            Gameboy.cpu.Add(65535);
+            Assert.AreEqual(351, Gameboy.cpu.HL.wide);
+            CheckFlags(false, false, true, true);
+
         }
 
 
@@ -59,10 +76,24 @@ namespace Kurui.Tests
         }
 
         [Test]
-        public void And() { }
+        public void And()
+        {
+            Gameboy.cpu.And(1);
+            AssertA(1);
+            CheckFlags(false, false, true, false);
+            Gameboy.cpu.And(0b11);
+            AssertA(1);
+            CheckFlags(false, false, true, false);
+            Gameboy.cpu.And(0);
+            CheckFlags(true, false, true, false);
+            
+        }
 
         [Test]
-        public void Bit() { }
+        public void Bit()
+        {
+
+        }
 
         [Test]
         public void CallRet() { }
@@ -100,7 +131,19 @@ namespace Kurui.Tests
         public void Shifts() { }
         [Test]
         public void Swap() { }
+
         [Test]
-        public void Xor() { }
+        public void Xor()
+        {
+            Gameboy.cpu.Xor(7);
+            AssertA(6);
+            CheckFlags(false, false, false, false);
+            Gameboy.cpu.Xor(200);
+            AssertA(206);
+            CheckFlags(false, false, false, false);
+            Gameboy.cpu.Xor(206);
+            AssertA(0);
+            CheckFlags(true, false, false, false);
+        }
     }
 }
