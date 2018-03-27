@@ -339,7 +339,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
-        public void Sra(ref byte destination, byte source)
+        public void Sra(ref byte destination)
         {
             int carry = destination & 128;
             SetC(destination.BitIsSet(0));
@@ -349,7 +349,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
-        public void Srl(ref byte destination, byte source)
+        public void Srl(ref byte destination)
         {
 
             SetC(destination.BitIsSet(0));
