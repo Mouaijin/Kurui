@@ -92,7 +92,11 @@ namespace Kurui.Tests
         [Test]
         public void Bit()
         {
-
+            Assert.AreEqual(true, Gameboy.cpu.GetC());
+            Gameboy.cpu.Bit(0b01, 0);
+            CheckFlags(false, false, true, true);
+            Gameboy.cpu.Bit(0b01, 1);
+            CheckFlags(true, false, true, true);
         }
 
         [Test]
@@ -109,8 +113,16 @@ namespace Kurui.Tests
         public void Daa() { }
         [Test]
         public void Dec() { }
+
         [Test]
-        public void DiEi() { }
+        public void DiEi()
+        {
+            Assert.False(Gameboy.interrupts.InterruptsEnabled);
+            Gameboy.cpu.Ei();
+            Assert.True(Gameboy.interrupts.InterruptsEnabled);
+            Gameboy.cpu.Di();
+            Assert.False(Gameboy.interrupts.InterruptsEnabled);
+        }
         [Test]
         public void Inc() { }
         [Test]
@@ -125,8 +137,21 @@ namespace Kurui.Tests
         public void ResSet() { }
         [Test]
         public void Rotates() { }
+
         [Test]
-        public void Sub() { }
+        public void Sub()
+        {
+            Gameboy.cpu.Sub(1);
+            AssertA(0);
+            CheckFlags(true, true, false, false);
+            Gameboy.cpu.Sub(1);
+            AssertA(255);
+            CheckFlags(false, true, true, true);
+            Gameboy.cpu.Sub(254, true);
+            AssertA(0);
+            CheckFlags(true, true, false, false);
+            
+        }
         [Test]
         public void Shifts() { }
         [Test]
