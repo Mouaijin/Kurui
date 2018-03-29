@@ -51,11 +51,106 @@
   <ItemGroup>
     <Compile Include="ImplTests.cs" />
     <Compile Include="CpuRegisterTests.cs" />
+    <Compile Include="InstructionRomTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RomTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Roms\cgb_sound\cgb_sound.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\01-registers.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\02-len ctr.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\03-trigger.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\04-sweep.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\05-sweep details.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\06-overflow on trigger.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\07-len sweep period sync.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\08-len ctr during power.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\09-wave read while on.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\10-wave trigger while on.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\11-regs after power.gb" />
+    <None Include="Roms\cgb_sound\rom_singles\12-wave.gb" />
+    <None Include="Roms\cgb_sound\source\common\console.bin" />
+    <None Include="Roms\cgb_sound\source\linkfile" />
+    <None Include="Roms\cpu_instrs\cpu_instrs.gb" />
+    <None Include="Roms\cpu_instrs\individual\01-special.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\02-interrupts.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\03-op sp,hl.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\04-op r,imm.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\05-op rp.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\06-ld r,r.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\07-jr,jp,call,ret,rst.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\08-misc instrs.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\09-op r,r.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\10-bit ops.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\individual\11-op a,%28hl%29.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Roms\cpu_instrs\source\common\console.bin" />
+    <None Include="Roms\cpu_instrs\source\linkfile" />
+    <None Include="Roms\dmg_sound\dmg_sound.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\01-registers.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\02-len ctr.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\03-trigger.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\04-sweep.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\05-sweep details.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\06-overflow on trigger.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\07-len sweep period sync.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\08-len ctr during power.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\09-wave read while on.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\10-wave trigger while on.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\11-regs after power.gb" />
+    <None Include="Roms\dmg_sound\rom_singles\12-wave write while on.gb" />
+    <None Include="Roms\dmg_sound\source\common\console.bin" />
+    <None Include="Roms\dmg_sound\source\linkfile" />
+    <None Include="Roms\halt_bug.gb" />
+    <None Include="Roms\instr_timing\instr_timing.gb" />
+    <None Include="Roms\instr_timing\source\common\console.bin" />
+    <None Include="Roms\instr_timing\source\linkfile" />
+    <None Include="Roms\interrupt_time\interrupt_time.gb" />
+    <None Include="Roms\mem_timing-2\mem_timing.gb" />
+    <None Include="Roms\mem_timing-2\rom_singles\01-read_timing.gb" />
+    <None Include="Roms\mem_timing-2\rom_singles\02-write_timing.gb" />
+    <None Include="Roms\mem_timing-2\rom_singles\03-modify_timing.gb" />
+    <None Include="Roms\mem_timing-2\source\common\console.bin" />
+    <None Include="Roms\mem_timing-2\source\linkfile" />
+    <None Include="Roms\mem_timing\individual\01-read_timing.gb" />
+    <None Include="Roms\mem_timing\individual\02-write_timing.gb" />
+    <None Include="Roms\mem_timing\individual\03-modify_timing.gb" />
+    <None Include="Roms\mem_timing\mem_timing.gb" />
+    <None Include="Roms\mem_timing\source\common\console.bin" />
+    <None Include="Roms\mem_timing\source\linkfile" />
+    <None Include="Roms\oam_bug\oam_bug.gb" />
+    <None Include="Roms\oam_bug\rom_singles\1-lcd_sync.gb" />
+    <None Include="Roms\oam_bug\rom_singles\2-causes.gb" />
+    <None Include="Roms\oam_bug\rom_singles\3-non_causes.gb" />
+    <None Include="Roms\oam_bug\rom_singles\4-scanline_timing.gb" />
+    <None Include="Roms\oam_bug\rom_singles\5-timing_bug.gb" />
+    <None Include="Roms\oam_bug\rom_singles\6-timing_no_bug.gb" />
+    <None Include="Roms\oam_bug\rom_singles\7-timing_effect.gb" />
+    <None Include="Roms\oam_bug\rom_singles\8-instr_effect.gb" />
+    <None Include="Roms\oam_bug\source\common\console.bin" />
+    <None Include="Roms\oam_bug\source\linkfile" />
     <None Include="Roms\rom_1Mb.gb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -71,6 +166,164 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Roms\cgb_sound\readme.txt" />
+    <Content Include="Roms\cgb_sound\source\01-registers.s" />
+    <Content Include="Roms\cgb_sound\source\02-len ctr.s" />
+    <Content Include="Roms\cgb_sound\source\03-trigger.s" />
+    <Content Include="Roms\cgb_sound\source\04-sweep.s" />
+    <Content Include="Roms\cgb_sound\source\05-sweep details.s" />
+    <Content Include="Roms\cgb_sound\source\06-overflow on trigger.s" />
+    <Content Include="Roms\cgb_sound\source\07-len sweep period sync.s" />
+    <Content Include="Roms\cgb_sound\source\08-len ctr during power.s" />
+    <Content Include="Roms\cgb_sound\source\09-wave read while on.s" />
+    <Content Include="Roms\cgb_sound\source\10-wave trigger while on.s" />
+    <Content Include="Roms\cgb_sound\source\11-regs after power.s" />
+    <Content Include="Roms\cgb_sound\source\12-wave.s" />
+    <Content Include="Roms\cgb_sound\source\common\build_gbs.s" />
+    <Content Include="Roms\cgb_sound\source\common\build_rom.s" />
+    <Content Include="Roms\cgb_sound\source\common\console.s" />
+    <Content Include="Roms\cgb_sound\source\common\crc.s" />
+    <Content Include="Roms\cgb_sound\source\common\delay.s" />
+    <Content Include="Roms\cgb_sound\source\common\gb.inc" />
+    <Content Include="Roms\cgb_sound\source\common\macros.inc" />
+    <Content Include="Roms\cgb_sound\source\common\numbers.s" />
+    <Content Include="Roms\cgb_sound\source\common\printing.s" />
+    <Content Include="Roms\cgb_sound\source\common\shell.s" />
+    <Content Include="Roms\cgb_sound\source\common\testing.s" />
+    <Content Include="Roms\cgb_sound\source\readme.txt" />
+    <Content Include="Roms\cgb_sound\source\shell.inc" />
+    <Content Include="Roms\cpu_instrs\readme.txt" />
+    <Content Include="Roms\cpu_instrs\source\01-special.s" />
+    <Content Include="Roms\cpu_instrs\source\02-interrupts.s" />
+    <Content Include="Roms\cpu_instrs\source\03-op sp,hl.s" />
+    <Content Include="Roms\cpu_instrs\source\04-op r,imm.s" />
+    <Content Include="Roms\cpu_instrs\source\05-op rp.s" />
+    <Content Include="Roms\cpu_instrs\source\06-ld r,r.s" />
+    <Content Include="Roms\cpu_instrs\source\07-jr,jp,call,ret,rst.s" />
+    <Content Include="Roms\cpu_instrs\source\08-misc instrs.s" />
+    <Content Include="Roms\cpu_instrs\source\09-op r,r.s" />
+    <Content Include="Roms\cpu_instrs\source\10-bit ops.s" />
+    <Content Include="Roms\cpu_instrs\source\11-op a,%28hl%29.s" />
+    <Content Include="Roms\cpu_instrs\source\common\apu.s" />
+    <Content Include="Roms\cpu_instrs\source\common\build_gbs.s" />
+    <Content Include="Roms\cpu_instrs\source\common\build_rom.s" />
+    <Content Include="Roms\cpu_instrs\source\common\checksums.s" />
+    <Content Include="Roms\cpu_instrs\source\common\console.s" />
+    <Content Include="Roms\cpu_instrs\source\common\cpu_speed.s" />
+    <Content Include="Roms\cpu_instrs\source\common\crc.s" />
+    <Content Include="Roms\cpu_instrs\source\common\crc_fast.s" />
+    <Content Include="Roms\cpu_instrs\source\common\delay.s" />
+    <Content Include="Roms\cpu_instrs\source\common\gb.inc" />
+    <Content Include="Roms\cpu_instrs\source\common\instr_test.s" />
+    <Content Include="Roms\cpu_instrs\source\common\macros.inc" />
+    <Content Include="Roms\cpu_instrs\source\common\multi_custom.s" />
+    <Content Include="Roms\cpu_instrs\source\common\numbers.s" />
+    <Content Include="Roms\cpu_instrs\source\common\printing.s" />
+    <Content Include="Roms\cpu_instrs\source\common\runtime.s" />
+    <Content Include="Roms\cpu_instrs\source\common\testing.s" />
+    <Content Include="Roms\cpu_instrs\source\shell.inc" />
+    <Content Include="Roms\dmg_sound\readme.txt" />
+    <Content Include="Roms\dmg_sound\source\01-registers.s" />
+    <Content Include="Roms\dmg_sound\source\02-len ctr.s" />
+    <Content Include="Roms\dmg_sound\source\03-trigger.s" />
+    <Content Include="Roms\dmg_sound\source\04-sweep.s" />
+    <Content Include="Roms\dmg_sound\source\05-sweep details.s" />
+    <Content Include="Roms\dmg_sound\source\06-overflow on trigger.s" />
+    <Content Include="Roms\dmg_sound\source\07-len sweep period sync.s" />
+    <Content Include="Roms\dmg_sound\source\08-len ctr during power.s" />
+    <Content Include="Roms\dmg_sound\source\09-wave read while on.s" />
+    <Content Include="Roms\dmg_sound\source\10-wave trigger while on.s" />
+    <Content Include="Roms\dmg_sound\source\11-regs after power.s" />
+    <Content Include="Roms\dmg_sound\source\12-wave write while on.s" />
+    <Content Include="Roms\dmg_sound\source\common\build_gbs.s" />
+    <Content Include="Roms\dmg_sound\source\common\build_rom.s" />
+    <Content Include="Roms\dmg_sound\source\common\console.s" />
+    <Content Include="Roms\dmg_sound\source\common\crc.s" />
+    <Content Include="Roms\dmg_sound\source\common\delay.s" />
+    <Content Include="Roms\dmg_sound\source\common\gb.inc" />
+    <Content Include="Roms\dmg_sound\source\common\macros.inc" />
+    <Content Include="Roms\dmg_sound\source\common\numbers.s" />
+    <Content Include="Roms\dmg_sound\source\common\printing.s" />
+    <Content Include="Roms\dmg_sound\source\common\shell.s" />
+    <Content Include="Roms\dmg_sound\source\common\testing.s" />
+    <Content Include="Roms\dmg_sound\source\readme.txt" />
+    <Content Include="Roms\dmg_sound\source\shell.inc" />
+    <Content Include="Roms\instr_timing\readme.txt" />
+    <Content Include="Roms\instr_timing\source\common\build_gbs.s" />
+    <Content Include="Roms\instr_timing\source\common\build_rom.s" />
+    <Content Include="Roms\instr_timing\source\common\console.s" />
+    <Content Include="Roms\instr_timing\source\common\crc.s" />
+    <Content Include="Roms\instr_timing\source\common\delay.s" />
+    <Content Include="Roms\instr_timing\source\common\gb.inc" />
+    <Content Include="Roms\instr_timing\source\common\macros.inc" />
+    <Content Include="Roms\instr_timing\source\common\numbers.s" />
+    <Content Include="Roms\instr_timing\source\common\printing.s" />
+    <Content Include="Roms\instr_timing\source\common\runtime.s" />
+    <Content Include="Roms\instr_timing\source\common\testing.s" />
+    <Content Include="Roms\instr_timing\source\common\timer.s" />
+    <Content Include="Roms\instr_timing\source\instr_timing.s" />
+    <Content Include="Roms\instr_timing\source\shell.inc" />
+    <Content Include="Roms\interrupt_time\interrupt_time.s" />
+    <Content Include="Roms\mem_timing-2\readme.txt" />
+    <Content Include="Roms\mem_timing-2\source\01-read_timing.s" />
+    <Content Include="Roms\mem_timing-2\source\02-write_timing.s" />
+    <Content Include="Roms\mem_timing-2\source\03-modify_timing.s" />
+    <Content Include="Roms\mem_timing-2\source\common\build_gbs.s" />
+    <Content Include="Roms\mem_timing-2\source\common\build_rom.s" />
+    <Content Include="Roms\mem_timing-2\source\common\console.s" />
+    <Content Include="Roms\mem_timing-2\source\common\crc.s" />
+    <Content Include="Roms\mem_timing-2\source\common\delay.s" />
+    <Content Include="Roms\mem_timing-2\source\common\gb.inc" />
+    <Content Include="Roms\mem_timing-2\source\common\macros.inc" />
+    <Content Include="Roms\mem_timing-2\source\common\numbers.s" />
+    <Content Include="Roms\mem_timing-2\source\common\printing.s" />
+    <Content Include="Roms\mem_timing-2\source\common\shell.s" />
+    <Content Include="Roms\mem_timing-2\source\common\testing.s" />
+    <Content Include="Roms\mem_timing-2\source\common\tima_64.s" />
+    <Content Include="Roms\mem_timing-2\source\readme.txt" />
+    <Content Include="Roms\mem_timing-2\source\shell.inc" />
+    <Content Include="Roms\mem_timing\readme.txt" />
+    <Content Include="Roms\mem_timing\source\01-read_timing.s" />
+    <Content Include="Roms\mem_timing\source\02-write_timing.s" />
+    <Content Include="Roms\mem_timing\source\03-modify_timing.s" />
+    <Content Include="Roms\mem_timing\source\common\build_gbs.s" />
+    <Content Include="Roms\mem_timing\source\common\build_rom.s" />
+    <Content Include="Roms\mem_timing\source\common\console.s" />
+    <Content Include="Roms\mem_timing\source\common\crc.s" />
+    <Content Include="Roms\mem_timing\source\common\delay.s" />
+    <Content Include="Roms\mem_timing\source\common\gb.inc" />
+    <Content Include="Roms\mem_timing\source\common\macros.inc" />
+    <Content Include="Roms\mem_timing\source\common\numbers.s" />
+    <Content Include="Roms\mem_timing\source\common\printing.s" />
+    <Content Include="Roms\mem_timing\source\common\runtime.s" />
+    <Content Include="Roms\mem_timing\source\common\testing.s" />
+    <Content Include="Roms\mem_timing\source\common\tima_64.s" />
+    <Content Include="Roms\mem_timing\source\shell.inc" />
+    <Content Include="Roms\oam_bug\readme.txt" />
+    <Content Include="Roms\oam_bug\source\1-lcd_sync.s" />
+    <Content Include="Roms\oam_bug\source\2-causes.s" />
+    <Content Include="Roms\oam_bug\source\3-non_causes.s" />
+    <Content Include="Roms\oam_bug\source\4-scanline_timing.s" />
+    <Content Include="Roms\oam_bug\source\5-timing_bug.s" />
+    <Content Include="Roms\oam_bug\source\6-timing_no_bug.s" />
+    <Content Include="Roms\oam_bug\source\7-timing_effect.s" />
+    <Content Include="Roms\oam_bug\source\8-instr_effect.s" />
+    <Content Include="Roms\oam_bug\source\common\build_gbs.s" />
+    <Content Include="Roms\oam_bug\source\common\build_rom.s" />
+    <Content Include="Roms\oam_bug\source\common\console.s" />
+    <Content Include="Roms\oam_bug\source\common\crc.s" />
+    <Content Include="Roms\oam_bug\source\common\delay.s" />
+    <Content Include="Roms\oam_bug\source\common\gb.inc" />
+    <Content Include="Roms\oam_bug\source\common\macros.inc" />
+    <Content Include="Roms\oam_bug\source\common\numbers.s" />
+    <Content Include="Roms\oam_bug\source\common\ppu.s" />
+    <Content Include="Roms\oam_bug\source\common\printing.s" />
+    <Content Include="Roms\oam_bug\source\common\shell.s" />
+    <Content Include="Roms\oam_bug\source\common\testing.s" />
+    <Content Include="Roms\oam_bug\source\readme.txt" />
+    <Content Include="Roms\oam_bug\source\shell.inc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

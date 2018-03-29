@@ -5,12 +5,6 @@ namespace Kurui.Core
 {
     internal partial class Cpu
     {
-        /*
-         Methods will receive an immediate value, if needed (calculated from memory if needed ELSEWHERE) (elided, if only one source possible)
-         Methods will modify flags directly
-         Methods will an Imm reference to modify in memory
-         Methods will all be void
-        */
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddCarry(int val) =>
             SetC(val > 0xFF);
@@ -30,6 +24,7 @@ namespace Kurui.Core
             SetH(carry && GetC() ? ( dest & 0x0F ) - ( val & 0x0F ) - 1 < 0 : ( dest & 0x0F ) - ( val & 0x0F ) < 0);
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add(byte source, bool carry = false)
         {
             int result = carry && GetC() ? A + source + 1 : A + source;
@@ -40,6 +35,7 @@ namespace Kurui.Core
             A = (byte) result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add(ushort source, bool carry = false)
         {
             int result = carry && GetC() ? HL.wide + source + 1 : HL.wide + source;
@@ -53,6 +49,7 @@ namespace Kurui.Core
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddSP(sbyte offset)
         {
             int result = SP.wide + offset;
@@ -71,6 +68,7 @@ namespace Kurui.Core
             SP.wide = (ushort) result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void And(byte source)
         {
             A = (byte) (A & source);
@@ -80,6 +78,7 @@ namespace Kurui.Core
             SetH(true);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Bit(byte source, byte index)
         {
             SetZ(!source.BitIsSet(index));
@@ -87,6 +86,7 @@ namespace Kurui.Core
             SetH(true);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Call(ushort source, bool condition = true)
         {
             if (!condition) return;
@@ -95,6 +95,7 @@ namespace Kurui.Core
             PC.wide = source;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Ccf()
         {
             SetN(false);
@@ -102,6 +103,7 @@ namespace Kurui.Core
             SetC(!GetC());
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Cp(byte source)
         {
             int result =  A - source;
@@ -111,6 +113,7 @@ namespace Kurui.Core
             SetZ(result == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Cpl()
         {
             A =(byte)(A ^ 0xFF);
@@ -118,6 +121,7 @@ namespace Kurui.Core
             SetH(true);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Daa()
         {
             //Stolen from reddit, so I'm sure it's broken
@@ -138,6 +142,7 @@ namespace Kurui.Core
             SetH(false);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte Dec(byte destination)
         {
             SubHalfCarry(destination, destination - 1, false);
@@ -147,27 +152,32 @@ namespace Kurui.Core
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ushort Dec(ushort destination)
         {
             destination -= 1;
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Di()
         {
             Gameboy.interrupts.DisableInterrupts();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Ei()
         {
             Gameboy.interrupts.EnableInterrupts();
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Halt()
         {
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte Inc(byte destination)
         {
             AddHalfCarry(destination, destination+1, false);
@@ -177,34 +187,28 @@ namespace Kurui.Core
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ushort Inc(ushort destination)
         {
             destination += 1;
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Jp(ushort source, bool condition = true)
         {
             if (!condition) return;
             PC.wide = source;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Jr(sbyte source, bool condition = true)
         {
             if (!condition) return;
             PC.wide = (ushort) ( PC.wide + source );
         }
 
-        //public void Ld(byte destination, byte source)
-        //{
-        //    destination = source;
-        //}
-
-        //public void Ld(ref ushort destination, ushort source)
-        //{
-        //    destination = source;
-        //}
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void LdHl(sbyte offset)
         {
             int result = (SP.wide + offset);
@@ -224,6 +228,7 @@ namespace Kurui.Core
             HL.wide = (ushort) result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Or(byte source)
         {
             A = (byte)(A | source);
@@ -233,24 +238,26 @@ namespace Kurui.Core
             SetH(false);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Pop(ref ushort destination)
         {
             SP.wide += 2;
             destination = Gameboy.mmu[SP.wide];
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Push(ushort source)
         {
             SP.wide -= 2;
             Gameboy.mmu[SP.wide] = new Imm(){wide = source, writeWide = true};
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte Res(byte destination, byte index)
         {
             destination.ClearBit(index);
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Ret(bool condition = true)
         {
             if (!condition) return;
@@ -258,6 +265,7 @@ namespace Kurui.Core
             SP.wide += 2;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rl(ref byte destination)
         {
             int carry = GetC() ? 1 : 0;
@@ -268,6 +276,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rlc(ref byte destination)
         {
             SetC(destination.BitIsSet(7));
@@ -279,6 +288,7 @@ namespace Kurui.Core
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rr(ref byte destination)
         {
             int carry = GetC() ? 128 : 0;
@@ -289,6 +299,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rrc(ref byte destination)
         {
             SetC(destination.BitIsSet(0));
@@ -300,6 +311,7 @@ namespace Kurui.Core
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rst(byte source)
         {
             SP.wide -= 2;
@@ -307,6 +319,7 @@ namespace Kurui.Core
             PC.wide = source;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Sub(byte source, bool carry = false)
         {
             int result = carry && GetC() ? A - source - 1 : A - source;
@@ -317,6 +330,7 @@ namespace Kurui.Core
             A = (byte) result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Scf()
         {
             SetN(false);
@@ -324,11 +338,14 @@ namespace Kurui.Core
             SetC(true);
         }
 
-        public void Set(ref byte destination, byte index)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public byte Set(byte destination, byte index)
         {
             destination.SetBit(index);
+            return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Sla(ref byte destination)
         {
 
@@ -339,6 +356,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Sra(ref byte destination)
         {
             int carry = destination & 128;
@@ -349,6 +367,7 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Srl(ref byte destination)
         {
 
@@ -359,10 +378,12 @@ namespace Kurui.Core
             SetZ(destination == 0);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Stop()
         {
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte Swap(byte destination)
         {
             int lo2hi = ( destination & 0x0F ) << 4;
@@ -375,6 +396,7 @@ namespace Kurui.Core
             return destination;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Xor(byte source)
         {
             A = (byte)(A ^ source);

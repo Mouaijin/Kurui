@@ -5,7 +5,7 @@
         private byte[] workRam = new byte[0x2000], 
                        hram = new byte[0x80],
             vram = new byte[0x2000],
-            sprites = new byte[0x9F];
+            sprites = new byte[0xA0];
 
         public Imm this[ushort index]
         {
